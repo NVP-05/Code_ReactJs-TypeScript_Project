@@ -8,14 +8,70 @@
       "id": 1
     },
     {
-      "email": "Phúc@gmail.com",
-      "username": "12345",
-      "password": "1234",
-      "confirmPassword": "1234",
-      "id": 2
+      "email": "Phúc1@gmail.com",
+      "username": "Nguyễn Phúc",
+      "password": "Phuc2005",
+      "status": true,
+      "id": 3
+    },
+    {
+      "email": "nvp05@gmail.com",
+      "username": "Nguyễn Phúc",
+      "password": "Phuc2005",
+      "status": true,
+      "id": 4
+    },
+    {
+      "email": "nvp005@gmail.com",
+      "username": "Nguyễn Phúc",
+      "password": "Phuc2005",
+      "status": true,
+      "id": 5
+    },
+    {
+      "email": "nvp2005@gmail.com",
+      "username": "Nguyễn Phúc",
+      "password": "Phuc2005",
+      "confirmPassword": "Phuc2005",
+      "id": 6
+    },
+    {
+      "email": "nguyenphuc2005@gmail.com",
+      "username": "Phúc",
+      "password": "Phuc2005",
+      "confirmPassword": "Phuc2005",
+      "id": 7
+    },
+    {
+      "email": "nguyenphuc2005@gmail.com",
+      "username": "Phúc",
+      "password": "Phuc2005",
+      "confirmPassword": "Phuc2005",
+      "id": 8
+    },
+    {
+      "email": "nguyenphuc@gmail.com",
+      "username": "Nguyễn Phúc",
+      "password": "Phuc2005",
+      "confirmPassword": "Phuc2005",
+      "id": 9
+    },
+    {
+      "email": "leanh@gmail.com",
+      "username": "Nguyễn Phúc",
+      "password": "Phuc2005",
+      "confirmPassword": "Phuc2005",
+      "id": 10
+    },
+    {
+      "email": "nvp0055@gmail.com",
+      "username": "Nguyễn Phúc",
+      "password": "Phuc2005",
+      "confirmPassword": "Phuc2005",
+      "id": 11
     }
   ],
-  "admin":[
+  "admin": [
     {
       "email": "admin@gmail.com",
       "username": "admin",

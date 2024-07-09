@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Errors, User } from "../../interface";
-import { addUser } from "../../store/reducers/registerReducer";
+import { addUser, resetSuccess } from "../../store/reducers/registerReducer";
 
 export default function Register() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const registrationSuccess = useSelector(
+    (state: any) => state.register.success
+  );
 
   const [user, setUser] = useState<User>({
     email: "",
@@ -15,6 +19,13 @@ export default function Register() {
   });
 
   const [errors, setErrors] = useState<Errors>({});
+
+  useEffect(() => {
+    if (registrationSuccess) {
+      dispatch(resetSuccess());
+      navigate("/login", { state: { message: "Đăng ký thành công!" } });
+    }
+  }, [registrationSuccess, dispatch, navigate]);
 
   const validateEmail = (email: string) => {
     const re = /\S+@\S+\.\S+/;
@@ -49,16 +60,32 @@ export default function Register() {
     setErrors({ ...errors, [name]: "" });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const checkEmailExists = async (email: string): Promise<boolean> => {
+    try {
+      const response = await fetch("http://localhost:8080/users");
+      const data = await response.json();
+      return data.some((u: User) => u.email === email);
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return true; // Assume error, prevent registration
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
-      const newUser: any = {
-        email: user.email,
-        username: user.username,
-        password: user.password,
-        status: true,
-      };
-      dispatch(addUser(newUser));
+      const emailExists = await checkEmailExists(user.email);
+      if (emailExists) {
+        setErrors({ ...errors, email: "Email đã được sử dụng." });
+      } else {
+        const newUser: User = {
+          email: user.email,
+          username: user.username,
+          password: user.password,
+          confirmPassword: user.confirmPassword,
+        };
+        dispatch(addUser(newUser));
+      }
     }
   };
 

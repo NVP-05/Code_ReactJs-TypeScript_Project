@@ -3,10 +3,12 @@ import { User } from "../../interface";
 
 interface RegisterState {
   users: User[];
+  success: boolean;
 }
 
 const initialState: RegisterState = {
   users: [],
+  success: false,
 };
 
 const registerSlice = createSlice({
@@ -15,19 +17,23 @@ const registerSlice = createSlice({
   reducers: {
     addUser: (state, action: PayloadAction<User>) => {
       state.users.push(action.payload);
-      console.log(action.payload);
-      
-      // Save to db.json
       fetch("http://localhost:8080/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(action.payload),
-      }).catch((error) => console.error("Error:", error));
+      })
+      .catch((error) => console.error("Error:", error));
+    },
+    setSuccess: (state, action: PayloadAction<boolean>) => {
+      state.success = action.payload;
+    },
+    resetSuccess: (state) => {
+      state.success = false;
     },
   },
 });
 
-export const { addUser } = registerSlice.actions;
+export const { addUser, setSuccess, resetSuccess } = registerSlice.actions;
 export const registerReducer = registerSlice.reducer;

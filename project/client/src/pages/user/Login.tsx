@@ -1,7 +1,72 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginFailure, loginSuccess } from "../../store/reducers/loginReducer";
+import { Userlogin } from "../../interface";
 
 export default function Login() {
+  const [user, setUser] = useState<Userlogin>({
+    email: "",
+    password: "",
+  });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const loginState = useSelector((state: any) => state.login);
+
+  useEffect(() => {
+    if (loginState.isLoggedIn) {
+      alert("Đăng nhập thành công.")
+      navigate("/home");
+    }
+  }, [loginState.isLoggedIn]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const adminResponse = await fetch("http://localhost:8080/admin");
+      const adminData = await adminResponse.json();
+
+      const foundAdmin = adminData.find(
+        (u: Userlogin) => u.email === user.email && u.password === user.password
+      );
+
+      if (foundAdmin) {
+        alert("Đăng nhập vào trang admin thành công.");
+        navigate("/admin");
+        return;
+      }
+
+      const userResponse = await fetch("http://localhost:8080/users");
+      const userData = await userResponse.json();
+
+      const foundUser = userData.find(
+        (u: Userlogin) => u.email === user.email && u.password === user.password
+      );
+
+      if (foundUser) {
+        dispatch(loginSuccess());
+        navigate("/home");
+      } else {
+        dispatch(loginFailure("Email hoặc mật khẩu không đúng"));
+      }
+    } catch (error) {
+      dispatch(loginFailure("Đã xảy ra lỗi"));
+    }
+  };
+
+  useEffect(() => {
+    if (location.state && location.state.message) {
+      alert(location.state.message);
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
@@ -12,19 +77,25 @@ export default function Login() {
             className="w-32"
           />
         </div>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="mb-4">
             <input
               type="text"
+              name="email"
               placeholder="Email"
               className="w-full p-2 border border-gray-300 rounded-lg"
+              value={user.email}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
             <input
               type="password"
+              name="password"
               placeholder="Mật khẩu"
               className="w-full p-2 border border-gray-300 rounded-lg"
+              value={user.password}
+              onChange={handleChange}
             />
           </div>
           <button
@@ -34,6 +105,11 @@ export default function Login() {
             Đăng nhập
           </button>
         </form>
+        {loginState.error && (
+          <div className="text-red-500 mt-4 text-center">
+            {loginState.error}
+          </div>
+        )}
         <br />
         <a href="#" className="block text-center text-blue-500 mb-4">
           Quên mật khẩu?
