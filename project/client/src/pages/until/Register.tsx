@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Errors, User } from "../../interface";
-import { addUser, resetSuccess } from "../../store/reducers/registerReducer";
+import { addUser } from "../../store/reducers/registerReducer";
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -19,13 +19,6 @@ export default function Register() {
   });
 
   const [errors, setErrors] = useState<Errors>({});
-
-  useEffect(() => {
-    if (registrationSuccess) {
-      dispatch(resetSuccess());
-      navigate("/login", { state: { message: "Đăng ký thành công!" } });
-    }
-  }, [registrationSuccess, dispatch, navigate]);
 
   const validateEmail = (email: string) => {
     const re = /\S+@\S+\.\S+/;
@@ -67,24 +60,26 @@ export default function Register() {
       return data.some((u: User) => u.email === email);
     } catch (error) {
       console.error("Error checking email:", error);
-      return true; // Assume error, prevent registration
+      return true;
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({}); 
     if (validate()) {
       const emailExists = await checkEmailExists(user.email);
       if (emailExists) {
         setErrors({ ...errors, email: "Email đã được sử dụng." });
       } else {
-        const newUser: User = {
+        const newUser: any = {
           email: user.email,
           username: user.username,
           password: user.password,
-          confirmPassword: user.confirmPassword,
+          status: true
         };
         dispatch(addUser(newUser));
+        navigate("/login");
       }
     }
   };

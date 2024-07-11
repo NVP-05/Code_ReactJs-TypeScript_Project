@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../interface";
+import { Userdb } from "../../interface";
 
 interface RegisterState {
-  users: User[];
+  users: Userdb[];
   success: boolean;
 }
 
@@ -15,7 +15,7 @@ const registerSlice = createSlice({
   name: "register",
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<User>) => {
+    addUser: (state, action: PayloadAction<Userdb>) => {
       state.users.push(action.payload);
       fetch("http://localhost:8080/users", {
         method: "POST",
@@ -24,16 +24,13 @@ const registerSlice = createSlice({
         },
         body: JSON.stringify(action.payload),
       })
-      .catch((error) => console.error("Error:", error));
-    },
-    setSuccess: (state, action: PayloadAction<boolean>) => {
-      state.success = action.payload;
-    },
-    resetSuccess: (state) => {
-      state.success = false;
+        .then(() => {
+          state.success = true;
+        })
+        .catch((error) => console.error("Error:", error));
     },
   },
 });
 
-export const { addUser, setSuccess, resetSuccess } = registerSlice.actions;
 export const registerReducer = registerSlice.reducer;
+export const { addUser } = registerSlice.actions;

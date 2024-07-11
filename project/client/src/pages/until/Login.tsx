@@ -17,10 +17,10 @@ export default function Login() {
 
   useEffect(() => {
     if (loginState.isLoggedIn) {
-      alert("Đăng nhập thành công.")
-      navigate("/home");
+      alert("Đăng nhập thành công.");
+      navigate("/");
     }
-  }, [loginState.isLoggedIn]);
+  }, [loginState.isLoggedIn, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,8 +51,12 @@ export default function Login() {
       );
 
       if (foundUser) {
-        dispatch(loginSuccess());
-        navigate("/home");
+        if (foundUser.status) {
+          dispatch(loginSuccess());
+          navigate("/");
+        } else {
+          dispatch(loginFailure("Tài khoản đã bị khóa"));
+        }
       } else {
         dispatch(loginFailure("Email hoặc mật khẩu không đúng"));
       }

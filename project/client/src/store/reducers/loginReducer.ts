@@ -1,9 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { LoginState } from "../../interface";
 
-interface LoginState {
-  isLoggedIn: boolean;
-  error: string | null;
-}
 
 const initialState: LoginState = {
   isLoggedIn: false,
@@ -18,7 +15,7 @@ const loginSlice = createSlice({
       state.isLoggedIn = true;
       state.error = null;
     },
-    loginFailure: (state, action: PayloadAction<string>) => {
+    loginFailure: (state, action) => {
       state.isLoggedIn = false;
       state.error = action.payload;
     },
