@@ -48,7 +48,7 @@ export default function AdminUser() {
         <ul>
           <li className="mb-2">
             <Link
-              to="#"
+              to="/admin/post"
               className="flex items-center px-4 py-2 hover:bg-blue-700 rounded"
             >
               <FaClipboardList className="mr-2" /> Quản lý bài viết
@@ -64,7 +64,7 @@ export default function AdminUser() {
           </li>
           <li className="mb-2">
             <Link
-              to="#"
+              to="/admin/group"
               className="flex items-center px-4 py-2 hover:bg-blue-700 rounded"
             >
               <FaUsers className="mr-2" /> Quản lý nhóm

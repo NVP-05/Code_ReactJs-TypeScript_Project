@@ -9,18 +9,18 @@ export default function Login() {
     email: "",
     password: "",
   });
-
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const loginState = useSelector((state: any) => state.login);
 
-  useEffect(() => {
-    if (loginState.isLoggedIn) {
-      alert("Đăng nhập thành công.");
-      navigate("/");
-    }
-  }, [loginState.isLoggedIn, navigate]);
+  // useEffect(() => {
+  //   if (loginState.isLoggedIn) {      
+  //     alert("Đăng nhập thành công.");
+  //     navigate("/");
+  //   }
+  // }, [loginState.isLoggedIn, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
